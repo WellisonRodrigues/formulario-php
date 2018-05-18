@@ -8,6 +8,13 @@
  */
 class UI_Comp_Formulario
 {
+    private $params;
+
+    function __construct()
+    {
+        $this->params = $_POST;
+        $this->renderer($this->params);
+    }
 
     public function uiCompFormulario($validateScript = false)
     {
@@ -16,23 +23,22 @@ class UI_Comp_Formulario
         }
     }
 
-    public function renderer()
+    public function renderer($params)
     {
-        if ($_POST['submit']) {
-            $params["tx_data"] = $_POST['tx_data'];
-            $params["tx_texto"] = $_POST['tx_texto'];
-            $params["tx_texto_grande"] = $_POST['tx_texto_grande'];
-            $variavel = $this->validate($params);
-            if ($variavel == 1) {
+        if ($params) {
+
+            $retorno = $this->validate($params);
+            if ($retorno == 1) {
                 echo 'Sucesso';
             } else {
                 echo 'Erro nas validações';
             }
+            $_POST = array();
         }
         return file_get_contents('form.php');
     }
 
-    public function validate($params)
+    private function validate($params)
     {
         $data = $params["tx_data"];
         $texto = $params["tx_texto"];
